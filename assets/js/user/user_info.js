@@ -19,7 +19,7 @@ $(function(){
                 if(res.status !== 0){
                     return layer.msg('用户访问失败')
                 }
-                console.log(res.data);
+                // console.log(res.data);
                 // 调用form.val()快速为表单赋值
                 form.val('formUserInfo',res.data)
             }
@@ -32,5 +32,25 @@ $(function(){
         e.preventDefault()
         
         initUserInfo()
+    })
+
+    // 监听表单的提交事件
+    $('.layui-form').on('submit',function(e){
+        e.preventDefault();
+        $.ajax({
+          method:'post',
+          url:'/my/userinfo',
+          data:$(this).serialize(),
+          success:function(res){
+            if(res.status !==0){
+                return layer.msg('更新用户信息失败！！！')
+            }  
+            layer.msg('更新用户信息成功')
+            console.log(res);
+            // 调用父页面中的方法，重新渲染用户的头像及信息
+            window.parent.getUserInfo()
+          }
+              
+        })
     })
 })
